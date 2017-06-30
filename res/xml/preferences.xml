@@ -8,5 +8,11 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/pref_DPC_unlock_barcode" />
+        <EditTextPreference
+            android:defaultValue="@string/pref_DPC_default_kiosk_package"
+            android:key="pref_DPC_kiosk_package"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_DPC_kiosk_package" />
     </PreferenceCategory>
 </PreferenceScreen>

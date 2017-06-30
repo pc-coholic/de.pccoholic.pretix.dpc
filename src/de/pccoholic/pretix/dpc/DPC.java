@@ -1,95 +1,107 @@
-/*
- * Kiosk Mode (aka Screen Pinning, aka Task Locking) demo for Android 5+
- *
- * Copyright 2015, SDG Systems, LLC
- */
-
 package de.pccoholic.pretix.dpc;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.os.AsyncTask;
+import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 public class DPC extends Activity {
-    private final static String TAG = "KioskModeDemo";
-    private Button button;
-    private boolean inKioskMode = false;
     private DevicePolicyManager dpm;
+    private ActivityManager am;
+    private SharedPreferences prefs;
     private ComponentName deviceAdmin;
-
-    private void showToast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-    }
-
-    private void setKioskMode(boolean on) {
-        try {
-            if (on) {
-                if (dpm.isLockTaskPermitted(this.getPackageName())) {
-                    startLockTask();
-                    inKioskMode = true;
-                    button.setText("Exit Kiosk Mode");
-                } else {
-                    showToast("Kiosk Mode not permitted");
-                }
-            } else {
-                stopLockTask();
-                inKioskMode = false;
-                button.setText("Enter Kiosk Mode");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e);
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        PreferenceManager.setDefaultValues(this, this.getPackageName(), Context.MODE_PRIVATE, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(this, this.getPackageName(), Context.MODE_PRIVATE, R.xml.preferences, true);
 
         setContentView(R.layout.main);
-        button = (Button) findViewById(R.id.button1);
+        am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         deviceAdmin = new ComponentName(this, AdminReceiver.class);
         dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+
         if (!dpm.isAdminActive(deviceAdmin)) {
-            showToast("This app is not a device admin!");
+            Common.showToast(this, "This app is not a device admin!");
         }
         if (dpm.isDeviceOwnerApp(getPackageName())) {
             dpm.setLockTaskPackages(deviceAdmin,
                     new String[] { getPackageName() });
         } else {
-            showToast("This app is not the device owner!");
+            Common.showToast(this, "This app is not the device owner!");
         }
 
-        toggleKioskMode2();
+        Intent unlockIntent = getIntent();
+
+        prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+
+        if (unlockIntent.getStringExtra("DPC_unlock_barcode") != null
+                && unlockIntent.getStringExtra("DPC_unlock_barcode").equals(prefs.getString("pref_DPC_unlock_barcode", null))) {
+            stopLockTask();
+        } else {
+            startLockTask();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        if (IsTaskLockActive()) {
+            startService(new Intent(this, StatusbarService.class));
+
+            Intent i = new Intent("android.intent.action.MAIN");
+            i.setClassName(prefs.getString("pref_DPC_kiosk_package", null), getMainActivity(prefs.getString("pref_DPC_kiosk_package", null)).name);
+            startActivity(i);
+        } else {
+            stopService(new Intent(this, StatusbarService.class));
+        }
     }
 
-    public void toggleKioskMode(View view) {
-        setKioskMode(!inKioskMode);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        stopService(new Intent(this, StatusbarService.class));
     }
-    public void toggleKioskMode2() {
-        setKioskMode(!inKioskMode);
+    public boolean IsTaskLockActive() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return am.isInLockTaskMode();
+        } else {
+            if (am.getLockTaskModeState() == ActivityManager.LOCK_TASK_MODE_NONE) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 
-    public void restoreLauncher(View view) {
-        dpm.clearPackagePersistentPreferredActivities(deviceAdmin,
-                this.getPackageName());
-        showToast("Home activity: " + Common.getHomeActivity(this));
-    }
-
-    public void setLauncher(View view) {
-        Common.becomeHomeActivity(this);
+    public ActivityInfo getMainActivity(String packageName) {
+        try {
+            PackageManager pm = getPackageManager();
+            Intent mainIntent = new Intent("android.intent.action.MAIN", null);
+            mainIntent.addCategory("android.intent.category.LAUNCHER");
+            for (ResolveInfo temp : pm.queryIntentActivities(mainIntent, 0)) {
+                if (temp.activityInfo.packageName.equals(packageName)) {
+                    return temp.activityInfo;
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

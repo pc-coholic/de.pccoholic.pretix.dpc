@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-/**
- * Created by martin on 29.06.17.
- */
-
 public class BarcodeReceiver extends BroadcastReceiver {
 
     @Override
@@ -27,7 +23,10 @@ public class BarcodeReceiver extends BroadcastReceiver {
         SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
 
         if (barcodeStr.equals(prefs.getString("pref_DPC_unlock_barcode", null))) {
-            // Fixme: stopLockTask();
+            Intent launchIntent = new Intent(context, DPC.class);
+            launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            launchIntent.putExtra("DPC_unlock_barcode", barcodeStr);
+            context.startActivity(launchIntent);
         }
     }
 

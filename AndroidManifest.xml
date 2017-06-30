@@ -2,18 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.pccoholic.pretix.dpc"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="21"
         android:targetSdkVersion="26" />
 
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+
     <application android:label="@string/app_name">
         <activity
-            android:name="de.pccoholic.pretix.dpc.DPC"
-            android:label="@string/app_name" >
+            android:name=".DPC"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -21,9 +29,9 @@
         </activity>
 
         <receiver
-            android:name="de.pccoholic.pretix.dpc.AdminReceiver"
+            android:name=".AdminReceiver"
             android:label="@string/device_admin"
-            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/device_admin" />
@@ -32,12 +40,26 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name="de.pccoholic.pretix.dpc.BarcodeReceiver">
+        <receiver android:name=".BarcodeReceiver">
             <intent-filter>
                 <action android:name="scan.rcv.message" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".PowerConnectionReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".BatteryReceiver">
+            <intent-filter android:priority="900">
+                <action android:name="android.intent.action.BATTERY_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".StatusbarService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>
