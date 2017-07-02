@@ -3,22 +3,22 @@ package de.pccoholic.pretix.dpc;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.os.BatteryManager;
 import android.os.IBinder;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class StatusbarService extends Service {
+    private static StatusbarService ins;
     private WindowManager windowManager;
-    private ImageView chatHead;
     private View statusBar;
 
     @Override public void onCreate() {
         super.onCreate();
+
+        ins = this;
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -44,20 +44,16 @@ public class StatusbarService extends Service {
         LayoutInflater inflate = (LayoutInflater) getBaseContext().getSystemService(this.LAYOUT_INFLATER_SERVICE);
         statusBar = inflate.inflate(R.layout.statusbar, null);
 
-        TextView t = statusBar.findViewById(R.id.textView);
+        setPowerConnection(PowerConnectionReceiver.getBatteryStatus(this));
+        setBatteryLevel(BatteryReceiver.getBatteryLevel(this));
 
-        BatteryManager bm = (BatteryManager) this.getSystemService(BATTERY_SERVICE);
-        int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-        t.setText("Battery level: " + String.valueOf(batLevel) + "%");
-
-        //windowManager.addView(chatHead, params);
         windowManager.addView(statusBar, params);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (chatHead != null) windowManager.removeView(chatHead);
+        if (statusBar != null) windowManager.removeView(statusBar);
     }
 
 
@@ -65,5 +61,25 @@ public class StatusbarService extends Service {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public static StatusbarService getInstace(){
+        return ins;
+    }
+
+    public void setBatteryLevel(final int level) {
+        ImageView batteryLevel = statusBar.findViewById(R.id.batteryLevel);
+        batteryLevel.setImageLevel(level);
+    }
+
+    public void setPowerConnection(final String connection) {
+        ImageView batteryLevel = statusBar.findViewById(R.id.batteryLevel);
+        if (connection.equals(Intent.ACTION_POWER_CONNECTED)) {
+            batteryLevel.setImageResource(R.drawable.stat_sys_battery_charge);
+        } else if (connection.equals(Intent.ACTION_POWER_DISCONNECTED)) {
+            batteryLevel.setImageResource(R.drawable.stat_sys_battery);
+        } else {
+            batteryLevel.setImageResource(R.drawable.ic_battery_unknown);
+        }
     }
 }

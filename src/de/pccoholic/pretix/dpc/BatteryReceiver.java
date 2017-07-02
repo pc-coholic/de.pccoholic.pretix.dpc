@@ -18,17 +18,14 @@ public class BatteryReceiver extends BroadcastReceiver {
             return;
         }
 
-        boolean isPresent = intent.getBooleanExtra("present", false);
-        String technology = intent.getStringExtra("technology");
-        int plugged = intent.getIntExtra("plugged", -1);
-        int scale = intent.getIntExtra("scale", -1);
-        int health = intent.getIntExtra("health", 0);
-        int status = intent.getIntExtra("status", 0);
-        int rawlevel = intent.getIntExtra("level", -1);
-        int level = 0;
-        Common.showToast(context, "rawlevel: " + String.valueOf(rawlevel));
+        int batLevel = getBatteryLevel(context);
+        DPC.getInstace().setBatteryLevel(batLevel);
+        StatusbarService.getInstace().setBatteryLevel(batLevel);
+    }
+
+    public static int getBatteryLevel(Context context) {
         BatteryManager bm = (BatteryManager) context.getSystemService(BATTERY_SERVICE);
         int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-        Common.showToast(context, "batlevel: " + String.valueOf(batLevel));
+        return batLevel;
     }
 }
