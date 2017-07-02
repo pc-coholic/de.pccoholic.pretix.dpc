@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
 
-    <application android:label="@string/app_name">
+    <application android:label="@string/app_name" android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".DPC"
             android:label="@string/app_name">
