@@ -14,18 +14,18 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         // ToDo: Broadcast the changes
         if (action.equals(Intent.ACTION_POWER_CONNECTED))
         {
-            DPC.getInstace().setPowerConnection(Intent.ACTION_POWER_CONNECTED);
-            StatusbarService.getInstace().setPowerConnection(Intent.ACTION_POWER_CONNECTED);
+            DPC.getInstance().setPowerConnection(Intent.ACTION_POWER_CONNECTED);
+            StatusbarService.getInstance().setPowerConnection(Intent.ACTION_POWER_CONNECTED);
             Common.showToast(context, "Connected");
         }
         else if(action.equals(Intent.ACTION_POWER_DISCONNECTED))
         {
-            DPC.getInstace().setPowerConnection(Intent.ACTION_POWER_DISCONNECTED);
-            StatusbarService.getInstace().setPowerConnection(Intent.ACTION_POWER_DISCONNECTED);
+            DPC.getInstance().setPowerConnection(Intent.ACTION_POWER_DISCONNECTED);
+            StatusbarService.getInstance().setPowerConnection(Intent.ACTION_POWER_DISCONNECTED);
             Common.showToast(context, "Disconnected");
         } else {
-            DPC.getInstace().setPowerConnection(Intent.CATEGORY_MONKEY);
-            StatusbarService.getInstace().setPowerConnection(Intent.CATEGORY_MONKEY);
+            DPC.getInstance().setPowerConnection(Intent.CATEGORY_MONKEY);
+            StatusbarService.getInstance().setPowerConnection(Intent.CATEGORY_MONKEY);
             Common.showToast(context, "Something happened to the power");
         }
     }

@@ -116,7 +116,7 @@ public class DPC extends Activity {
         }
     }
 
-    public static DPC getInstace(){
+    public static DPC getInstance(){
         return ins;
     }
 

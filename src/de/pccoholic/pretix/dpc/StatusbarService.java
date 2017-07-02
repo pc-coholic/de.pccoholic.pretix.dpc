@@ -44,10 +44,10 @@ public class StatusbarService extends Service {
         LayoutInflater inflate = (LayoutInflater) getBaseContext().getSystemService(this.LAYOUT_INFLATER_SERVICE);
         statusBar = inflate.inflate(R.layout.statusbar, null);
 
+        windowManager.addView(statusBar, params);
+
         setPowerConnection(PowerConnectionReceiver.getBatteryStatus(this));
         setBatteryLevel(BatteryReceiver.getBatteryLevel(this));
-
-        windowManager.addView(statusBar, params);
     }
 
     @Override
@@ -63,23 +63,27 @@ public class StatusbarService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public static StatusbarService getInstace(){
+    public static StatusbarService getInstance(){
         return ins;
     }
 
     public void setBatteryLevel(final int level) {
-        ImageView batteryLevel = statusBar.findViewById(R.id.batteryLevel);
-        batteryLevel.setImageLevel(level);
+        if (getInstance() != null){
+            ImageView batteryLevel = statusBar.findViewById(R.id.batteryLevel);
+            batteryLevel.setImageLevel(level);
+        }
     }
 
     public void setPowerConnection(final String connection) {
-        ImageView batteryLevel = statusBar.findViewById(R.id.batteryLevel);
-        if (connection.equals(Intent.ACTION_POWER_CONNECTED)) {
-            batteryLevel.setImageResource(R.drawable.stat_sys_battery_charge);
-        } else if (connection.equals(Intent.ACTION_POWER_DISCONNECTED)) {
-            batteryLevel.setImageResource(R.drawable.stat_sys_battery);
-        } else {
-            batteryLevel.setImageResource(R.drawable.ic_battery_unknown);
+        if (ins != null) {
+            ImageView batteryLevel = statusBar.findViewById(R.id.batteryLevel);
+            if (connection.equals(Intent.ACTION_POWER_CONNECTED)) {
+                batteryLevel.setImageResource(R.drawable.stat_sys_battery_charge);
+            } else if (connection.equals(Intent.ACTION_POWER_DISCONNECTED)) {
+                batteryLevel.setImageResource(R.drawable.stat_sys_battery);
+            } else {
+                batteryLevel.setImageResource(R.drawable.ic_battery_unknown);
+            }
         }
     }
 }
