@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import static android.content.Context.BATTERY_SERVICE;
 
@@ -24,7 +23,7 @@ public class BatteryReceiver extends BroadcastReceiver {
             DPC.getInstance().setBatteryLevel(batLevel);
             StatusbarService.getInstance().setBatteryLevel(batLevel);
         } catch (NullPointerException e) {
-            Log.d("foobar", "powerexception");
+
         }
     }
 
