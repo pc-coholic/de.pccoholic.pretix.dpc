@@ -51,8 +51,6 @@ public class DPC extends Activity {
         setBatteryLevel(BatteryReceiver.getBatteryLevel(this));
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        //BroadcastReceiver receiver = new BatteryReceiver();
-        //registerReceiver(receiver, filter);
         batteryReceiver = new BatteryReceiver();
         registerReceiver(batteryReceiver, filter);
 
