@@ -74,8 +74,8 @@ public class DPC extends Activity {
 
             Intent i = new Intent("android.intent.action.MAIN");
             //ToDo: Try/Catch if app is not installed
-            //i.setClassName(prefs.getString("pref_DPC_kiosk_package", null), getMainActivity(prefs.getString("pref_DPC_kiosk_package", null)).name);
-            //startActivity(i);
+            i.setClassName(prefs.getString("pref_DPC_kiosk_package", null), getMainActivity(prefs.getString("pref_DPC_kiosk_package", null)).name);
+            startActivity(i);
         } else {
             stopService(new Intent(this, StatusbarService.class));
         }
@@ -91,7 +91,7 @@ public class DPC extends Activity {
     @Override
     public void onStop() {
         super.onStop();
-        unregisterReceiver(batteryReceiver);
+        //unregisterReceiver(batteryReceiver);
     }
     public boolean IsTaskLockActive() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
