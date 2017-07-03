@@ -23,6 +23,7 @@ public class DPC extends Activity {
     private ActivityManager am;
     private SharedPreferences prefs;
     private ComponentName deviceAdmin;
+    private BroadcastReceiver batteryReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,10 @@ public class DPC extends Activity {
         setBatteryLevel(BatteryReceiver.getBatteryLevel(this));
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        BroadcastReceiver receiver = new BatteryReceiver();
-        registerReceiver(receiver, filter);
+        //BroadcastReceiver receiver = new BatteryReceiver();
+        //registerReceiver(receiver, filter);
+        batteryReceiver = new BatteryReceiver();
+        registerReceiver(batteryReceiver, filter);
 
         Intent unlockIntent = getIntent();
         prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
@@ -87,6 +90,11 @@ public class DPC extends Activity {
         stopService(new Intent(this, StatusbarService.class));
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(batteryReceiver);
+    }
     public boolean IsTaskLockActive() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return am.isInLockTaskMode();
