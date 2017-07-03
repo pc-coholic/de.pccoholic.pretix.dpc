@@ -1,8 +1,13 @@
 package de.pccoholic.pretix.dpc;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.view.Gravity;
@@ -60,6 +65,26 @@ public class StatusbarService extends Service {
                 handler.postDelayed(this, 1000);
                 TextView dateTimeTextView = statusBar.findViewById(R.id.dateTime);
                 dateTimeTextView.setText(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()));
+
+                ImageView wifiLevel = statusBar.findViewById(R.id.wifiLevel);
+
+                ConnectivityManager cm = (ConnectivityManager) getBaseContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+                if (networkInfo != null) {
+                    if (networkInfo.isConnected()) {
+                        wifiLevel.setImageResource(R.drawable.stat_sys_wifi);
+                    } else {
+                        wifiLevel.setImageResource(R.drawable.ic_signal_wifi_off);
+                    }
+                } else {
+                    wifiLevel.setImageResource(R.drawable.ic_signal_wifi_off);
+                }
+
+
+                WifiManager wifiManager = (WifiManager) getBaseContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                wifiLevel.setImageLevel( WifiManager.calculateSignalLevel(wifiInfo.getRssi(), 5));
+
             }
         };
         handler.postDelayed(r, 0000);
