@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <ImageView
-        android:id="@+id/batteryLevel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:src="@drawable/ic_battery_unknown" />
+    android:layout_height="30dp">
 
     <ImageView
         android:id="@+id/wifiLevel"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:layout_margin="3dp"
         android:src="@drawable/ic_signal_wifi_off" />
+
+    <ImageView
+        android:id="@+id/batteryLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/wifiLevel"
+        android:adjustViewBounds="true"
+        android:layout_margin="3dp"
+        android:src="@drawable/ic_battery_unknown" />
 
     <TextView
         android:id="@+id/dateTime"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/batteryLevel"
+        android:gravity="right|center_vertical"
+        android:text="01.01.1970 00:00:00"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>
