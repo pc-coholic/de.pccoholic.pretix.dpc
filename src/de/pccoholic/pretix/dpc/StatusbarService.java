@@ -3,12 +3,17 @@ package de.pccoholic.pretix.dpc;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Handler;
 import android.os.IBinder;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class StatusbarService extends Service {
     private static StatusbarService ins;
@@ -48,16 +53,28 @@ public class StatusbarService extends Service {
 
         setPowerConnection(PowerConnectionReceiver.getBatteryStatus(this));
         setBatteryLevel(BatteryReceiver.getBatteryLevel(this));
+
+        final Handler handler = new Handler();
+        final Runnable r = new Runnable() {
+            public void run() {
+                handler.postDelayed(this, 1000);
+                TextView dateTimeTextView = statusBar.findViewById(R.id.dateTime);
+                dateTimeTextView.setText(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()));
+            }
+        };
+        handler.postDelayed(r, 0000);
     }
+
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (statusBar != null) windowManager.removeView(statusBar);
+        if (statusBar != null) {
+            windowManager.removeView(statusBar);
+        }
     }
 
-
-    @Override
+     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
