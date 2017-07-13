@@ -57,15 +57,9 @@ public class DPC extends Activity {
         batteryReceiver = new BatteryReceiver();
         registerReceiver(batteryReceiver, filter);
 
-        Intent unlockIntent = getIntent();
         prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
 
-        if (unlockIntent.getStringExtra("DPC_unlock_barcode") != null
-                && unlockIntent.getStringExtra("DPC_unlock_barcode").equals(prefs.getString("pref_DPC_unlock_barcode", null))) {
-            stopLockTask();
-        } else {
-            startLockTask();
-        }
+        startLockTask();
     }
 
     @Override
@@ -151,6 +145,16 @@ public class DPC extends Activity {
                 } else {
                     batteryLevel.setImageResource(R.drawable.ic_battery_unknown);
                 }
+            }
+        });
+    }
+
+    public void stopLockTaskAndDie() {
+        DPC.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                stopLockTask();
+                finishAndRemoveTask();
             }
         });
     }

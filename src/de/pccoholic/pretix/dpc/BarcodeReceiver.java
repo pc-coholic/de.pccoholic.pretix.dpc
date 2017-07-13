@@ -23,10 +23,7 @@ public class BarcodeReceiver extends BroadcastReceiver {
         SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
 
         if (barcodeStr.equals(prefs.getString("pref_DPC_unlock_barcode", null))) {
-            Intent launchIntent = new Intent(context, DPC.class);
-            launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            launchIntent.putExtra("DPC_unlock_barcode", barcodeStr);
-            context.startActivity(launchIntent);
+            DPC.getInstance().stopLockTaskAndDie();
         }
     }
 
