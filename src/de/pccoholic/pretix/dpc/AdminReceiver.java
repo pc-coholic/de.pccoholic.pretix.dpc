@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 public class AdminReceiver extends DeviceAdminReceiver {
-
+/*
     @Override
     public void onEnabled(Context context, Intent intent) {
         Common.showToast(context, "[Device Admin enabled]");
@@ -22,8 +22,7 @@ public class AdminReceiver extends DeviceAdminReceiver {
     }
 
     @Override
-    public void onLockTaskModeEntering(Context context, Intent intent,
-            String pkg) {
+    public void onLockTaskModeEntering(Context context, Intent intent, String pkg) {
         Common.showToast(context, "[Kiosk Mode enabled]");
     }
 
@@ -31,4 +30,5 @@ public class AdminReceiver extends DeviceAdminReceiver {
     public void onLockTaskModeExiting(Context context, Intent intent) {
         Common.showToast(context, "[Kiosk Mode disabled]");
     }
+*/
 }

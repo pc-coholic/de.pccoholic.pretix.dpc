@@ -59,6 +59,7 @@ public class DPC extends Activity {
 
         prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
 
+        AdminActivities.becomeHomeActivity(this);
         startLockTask();
     }
 
@@ -88,7 +89,7 @@ public class DPC extends Activity {
     @Override
     public void onStop() {
         super.onStop();
-        //unregisterReceiver(batteryReceiver);
+        unregisterReceiver(batteryReceiver);
     }
     public boolean IsTaskLockActive() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -154,6 +155,7 @@ public class DPC extends Activity {
             @Override
             public void run() {
                 stopLockTask();
+                AdminActivities.restoreLauncher(DPC.getInstance());
                 finishAndRemoveTask();
             }
         });
