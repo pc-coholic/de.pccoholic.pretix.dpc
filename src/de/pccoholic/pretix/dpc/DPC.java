@@ -59,6 +59,8 @@ public class DPC extends Activity {
 
         prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
 
+        Common.setScannerToBroadcast();
+
         AdminActivities.becomeHomeActivity(this);
         startLockTask();
     }
