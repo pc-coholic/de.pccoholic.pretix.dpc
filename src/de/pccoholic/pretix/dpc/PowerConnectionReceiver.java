@@ -17,12 +17,23 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
             DPC.getInstance().setPowerConnection(Intent.ACTION_POWER_CONNECTED);
             StatusbarService.getInstance().setPowerConnection(Intent.ACTION_POWER_CONNECTED);
             Common.showToast(context, "Connected");
+            try {
+                DPC.getInstance().restartApplication();
+            } catch(Exception e) {
+
+            }
+
         }
         else if(action.equals(Intent.ACTION_POWER_DISCONNECTED))
         {
             DPC.getInstance().setPowerConnection(Intent.ACTION_POWER_DISCONNECTED);
             StatusbarService.getInstance().setPowerConnection(Intent.ACTION_POWER_DISCONNECTED);
             Common.showToast(context, "Disconnected");
+            try {
+                DPC.getInstance().restartApplication();
+            } catch(Exception e) {
+
+            }
         } else {
             DPC.getInstance().setPowerConnection(Intent.CATEGORY_MONKEY);
             StatusbarService.getInstance().setPowerConnection(Intent.CATEGORY_MONKEY);

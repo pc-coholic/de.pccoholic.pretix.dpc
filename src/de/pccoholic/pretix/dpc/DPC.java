@@ -2,6 +2,8 @@ package de.pccoholic.pretix.dpc;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -70,12 +72,16 @@ public class DPC extends Activity {
         super.onResume();
 
         if (IsTaskLockActive()) {
-            startService(new Intent(this, StatusbarService.class));
+            if (PowerConnectionReceiver.getBatteryStatus(this) == Intent.ACTION_POWER_DISCONNECTED) {
+                startService(new Intent(this, StatusbarService.class));
 
-            Intent i = new Intent("android.intent.action.MAIN");
-            //ToDo: Try/Catch if app is not installed
-            i.setClassName(prefs.getString("pref_DPC_kiosk_package", null), getMainActivity(prefs.getString("pref_DPC_kiosk_package", null)).name);
-            startActivity(i);
+                Intent i = new Intent("android.intent.action.MAIN");
+                //ToDo: Try/Catch if app is not installed
+                i.setClassName(prefs.getString("pref_DPC_kiosk_package", null), getMainActivity(prefs.getString("pref_DPC_kiosk_package", null)).name);
+                startActivity(i);
+            } else {
+                stopService(new Intent(this, StatusbarService.class));
+            }
         } else {
             stopService(new Intent(this, StatusbarService.class));
         }
@@ -159,6 +165,20 @@ public class DPC extends Activity {
                 stopLockTask();
                 AdminActivities.restoreLauncher(DPC.getInstance());
                 finishAndRemoveTask();
+            }
+        });
+    }
+
+    public void restartApplication() {
+        DPC.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent mStartActivity = new Intent(DPC.getInstance(), DPC.class);
+                int mPendingIntentId = ((int) System.currentTimeMillis());
+                PendingIntent mPendingIntent = PendingIntent.getActivity(DPC.getInstance(), mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager mgr = (AlarmManager)DPC.getInstance().getSystemService(Context.ALARM_SERVICE);
+                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, mPendingIntent);
+                stopLockTaskAndDie();
             }
         });
     }
