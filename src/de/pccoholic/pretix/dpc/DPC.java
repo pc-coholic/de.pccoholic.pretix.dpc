@@ -97,7 +97,13 @@ public class DPC extends Activity {
     @Override
     public void onStop() {
         super.onStop();
-        unregisterReceiver(batteryReceiver);
+
+        try {
+            unregisterReceiver(batteryReceiver);
+        } catch (Exception e) {
+
+        }
+
     }
     public boolean IsTaskLockActive() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
