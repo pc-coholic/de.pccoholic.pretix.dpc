@@ -43,13 +43,13 @@ public class DPC extends Activity {
         dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
 
         if (!dpm.isAdminActive(deviceAdmin)) {
-            Common.showToast(this, "This app is not a device admin!");
+            Common.showToast(this, "pretixDPC is not a device administrator! Please check the documentation.");
         }
         if (dpm.isDeviceOwnerApp(getPackageName())) {
             dpm.setLockTaskPackages(deviceAdmin,
                     new String[] { getPackageName() });
         } else {
-            Common.showToast(this, "This app is not the device owner!");
+            Common.showToast(this, "pretixDPC is not the device owner! Please check the documentation.");
         }
 
         setPowerConnection(PowerConnectionReceiver.getBatteryStatus(this));
