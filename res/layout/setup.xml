@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/setupErrorTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="setupErrorTitle"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/setupErrorExpl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="setupErrorExpl" />
+
+    <Button
+        android:id="@+id/setupAction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="setupAction"
+        android:visibility="invisible"/>
+</LinearLayout>
