@@ -26,4 +26,5 @@
         android:layout_height="wrap_content"
         android:text="setupAction"
         android:visibility="invisible"/>
+
 </LinearLayout>

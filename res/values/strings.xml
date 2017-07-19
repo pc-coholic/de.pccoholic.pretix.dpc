@@ -5,10 +5,10 @@
     <string name="device_admin">pretix DPC</string>
     <string name="device_admin_description">pretix DPC</string>
     <string name="pref_DPC_head">Device Policy Controler (DPC) Settings</string>
+    <string name="pref_DPC_is_provisioned">DPC is provisioned</string>
     <string name="pref_DPC_unlock_barcode">Barcode used to unlock device</string>
-    <string name="pref_DPC_default_unlock_barcode">4002590140964</string>
-    <string name="pref_DPC_kiosk_package">Name of package that should run in Kiosk Mode</string>
-    <string name="pref_DPC_default_kiosk_package">eu.pretix.pretixdroid</string>
+    <string name="pref_DPC_kiosk_package">Name of package that should run in kiosk mode</string>
+    <string name="pref_DPC_kiosk_package_url">Download URL kiosk application</string>
     <string name="setup_not_device_owner">pretixDPC is not the device owner!</string>
     <string name="setup_not_device_owner_expl">In order to function correctly, pretixDPC needs to be the device owner.\nThis can only be done by provisioning the device when there has been no account added to the device yet.\n\nThe most reliable way is to provision the device with the help an NFC-tag or by bumping it to another NFC-enabled phone.\n\nIf no NFC-tag or device is at hand, the same can be achieved by executing the following command through adb:\nadb shell dpm set-device-owner de.pccoholic.pretix.dpc/.AdminReceiver</string>
     <string name="setup_not_device_admin">pretixDPC is not the device administrator!</string>

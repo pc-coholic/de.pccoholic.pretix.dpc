@@ -2,17 +2,24 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/pref_DPC_head">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_DPC_is_provisioned"
+            android:title="@string/pref_DPC_is_provisioned" />
         <EditTextPreference
-            android:defaultValue="@string/pref_DPC_default_unlock_barcode"
             android:key="pref_DPC_unlock_barcode"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/pref_DPC_unlock_barcode" />
         <EditTextPreference
-            android:defaultValue="@string/pref_DPC_default_kiosk_package"
             android:key="pref_DPC_kiosk_package"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/pref_DPC_kiosk_package" />
+        <EditTextPreference
+            android:key="pref_DPC_kiosk_package_url"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_DPC_kiosk_package_url" />
     </PreferenceCategory>
 </PreferenceScreen>

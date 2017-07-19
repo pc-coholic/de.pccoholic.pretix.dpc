@@ -1,11 +1,13 @@
 package de.pccoholic.pretix.dpc;
 
 import android.app.admin.DevicePolicyManager;
+import android.app.admin.DnsEvent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.provider.Settings;
 
 public class AdminActivities {
     static String getHomeActivity(Context c) {
@@ -48,4 +50,10 @@ public class AdminActivities {
         //Common.showToast(c, "Home activity: " + getHomeActivity(c));
     }
 
+    static void allowNonMarketAppsInstallation(Context context) {
+        ComponentName deviceAdmin = new ComponentName(context, AdminReceiver.class);
+        DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+
+        dpm.setSecureSetting(deviceAdmin, Settings.Secure.INSTALL_NON_MARKET_APPS, "1");
+    }
 }
