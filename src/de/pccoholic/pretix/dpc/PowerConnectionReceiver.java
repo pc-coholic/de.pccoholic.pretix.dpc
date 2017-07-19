@@ -11,24 +11,20 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        // ToDo: Broadcast the changes
         if (action.equals(Intent.ACTION_POWER_CONNECTED))
         {
             DPC.getInstance().setPowerConnection(Intent.ACTION_POWER_CONNECTED);
             StatusbarService.getInstance().setPowerConnection(Intent.ACTION_POWER_CONNECTED);
-            Common.showToast(context, "Connected");
             try {
                 DPC.getInstance().restartApplication();
             } catch(Exception e) {
 
             }
-
         }
         else if(action.equals(Intent.ACTION_POWER_DISCONNECTED))
         {
             DPC.getInstance().setPowerConnection(Intent.ACTION_POWER_DISCONNECTED);
             StatusbarService.getInstance().setPowerConnection(Intent.ACTION_POWER_DISCONNECTED);
-            Common.showToast(context, "Disconnected");
             try {
                 DPC.getInstance().restartApplication();
             } catch(Exception e) {
@@ -37,7 +33,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         } else {
             DPC.getInstance().setPowerConnection(Intent.CATEGORY_MONKEY);
             StatusbarService.getInstance().setPowerConnection(Intent.CATEGORY_MONKEY);
-            Common.showToast(context, "Something happened to the power");
+            Common.showToast(context, "Something happened to the power...");
         }
     }
 

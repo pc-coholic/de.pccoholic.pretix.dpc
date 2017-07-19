@@ -23,7 +23,11 @@ public class BarcodeReceiver extends BroadcastReceiver {
         SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
 
         if (barcodeStr.equals(prefs.getString("pref_DPC_unlock_barcode", null))) {
-            DPC.getInstance().stopLockTaskAndDie();
+            try {
+                DPC.getInstance().stopLockTaskAndDie();
+            } catch (Exception e) {
+
+            }
         }
     }
 

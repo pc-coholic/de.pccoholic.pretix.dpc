@@ -69,29 +69,16 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
-        <!--
-                        <receiver android:name=".BarcodeReceiver">
-                            <intent-filter>
-                                <action android:name="scan.rcv.message" />
-                            </intent-filter>
-                        </receiver>
-                        <receiver android:name=".PowerConnectionReceiver">
-                            <intent-filter>
-                                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-                                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
-                            </intent-filter>
-                        </receiver>
-                        <receiver android:name=".BatteryReceiver">
-                            <intent-filter android:priority="900">
-                                <action android:name="android.intent.action.BATTERY_CHANGED" />
-                            </intent-filter>
-                        </receiver>
-        -->
-<!--
+
+        <receiver android:name=".BarcodeReceiver">
+            <intent-filter>
+                <action android:name="scan.rcv.message" />
+            </intent-filter>
+        </receiver>
+
         <service android:name=".StatusbarService"
             android:enabled="true"
             android:exported="true">
         </service>
--->
     </application>
 </manifest>

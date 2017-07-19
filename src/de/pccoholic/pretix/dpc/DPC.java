@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,17 +14,16 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class DPC extends Activity {
     private static DPC ins;
-    private DevicePolicyManager dpm;
     private ActivityManager am;
     private SharedPreferences prefs;
-    private ComponentName deviceAdmin;
     private BroadcastReceiver batteryReceiver;
+    private BroadcastReceiver powerconnectionReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,35 +33,30 @@ public class DPC extends Activity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        PreferenceManager.setDefaultValues(this, this.getPackageName(), Context.MODE_PRIVATE, R.xml.preferences, true);
-
         setContentView(R.layout.main);
         am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        deviceAdmin = new ComponentName(this, AdminReceiver.class);
-        dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-
-        if (!dpm.isAdminActive(deviceAdmin)) {
-            Common.showToast(this, "pretixDPC is not a device administrator! Please check the documentation.");
-        }
-        if (dpm.isDeviceOwnerApp(getPackageName())) {
-            dpm.setLockTaskPackages(deviceAdmin,
-                    new String[] { getPackageName() });
-        } else {
-            Common.showToast(this, "pretixDPC is not the device owner! Please check the documentation.");
-        }
 
         setPowerConnection(PowerConnectionReceiver.getBatteryStatus(this));
         setBatteryLevel(BatteryReceiver.getBatteryLevel(this));
 
-        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        batteryReceiver = new BatteryReceiver();
-        registerReceiver(batteryReceiver, filter);
+        IntentFilter batteryReceiverFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        this.batteryReceiver = new BatteryReceiver();
+        registerReceiver(this.batteryReceiver, batteryReceiverFilter);
+
+        IntentFilter powerConnectionReciverFilter = new IntentFilter();
+        powerConnectionReciverFilter.addAction(Intent.ACTION_POWER_CONNECTED);
+        powerConnectionReciverFilter.addAction(Intent.ACTION_POWER_DISCONNECTED);
+        powerconnectionReceiver = new PowerConnectionReceiver();
+        registerReceiver(powerconnectionReceiver, powerConnectionReciverFilter);
 
         prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
 
         Common.setScannerToBroadcast();
 
         AdminActivities.becomeHomeActivity(this);
+
+        startService(new Intent(this, StatusbarService.class));
+
         startLockTask();
     }
 
@@ -74,17 +66,10 @@ public class DPC extends Activity {
 
         if (IsTaskLockActive()) {
             if (PowerConnectionReceiver.getBatteryStatus(this) == Intent.ACTION_POWER_DISCONNECTED) {
-                startService(new Intent(this, StatusbarService.class));
-
                 Intent i = new Intent("android.intent.action.MAIN");
-                //ToDo: Try/Catch if app is not installed
                 i.setClassName(prefs.getString("pref_DPC_kiosk_package", null), getMainActivity(prefs.getString("pref_DPC_kiosk_package", null)).name);
                 startActivity(i);
-            } else {
-                stopService(new Intent(this, StatusbarService.class));
             }
-        } else {
-            stopService(new Intent(this, StatusbarService.class));
         }
     }
 
@@ -93,11 +78,6 @@ public class DPC extends Activity {
         super.onDestroy();
 
         stopService(new Intent(this, StatusbarService.class));
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
 
         try {
             unregisterReceiver(batteryReceiver);
@@ -105,7 +85,13 @@ public class DPC extends Activity {
 
         }
 
+        try {
+            unregisterReceiver(powerconnectionReceiver);
+        } catch (Exception e) {
+
+        }
     }
+
     public boolean IsTaskLockActive() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return am.isInLockTaskMode();

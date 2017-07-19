@@ -13,7 +13,6 @@ public class BatteryReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
-
         if (bundle == null) {
             return;
         }
