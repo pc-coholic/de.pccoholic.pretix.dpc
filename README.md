@@ -75,6 +75,7 @@ By scanning your `pref_DPC_unlock_barcode`, pretixDPC will terminate and allow y
 By scanning your `pref_DPC_unlock_barcode`, but prefixed with `DPCRESET_`, pretixDPC will exit and revert all settings to default. Upon the next start, you will be asked to provision the app again. If you used the above example configuration, you can find corresponding QR code [here](https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=DPCRESET_4002590140964).
 
 __Note:__ The settings of the kiosk application itself won't be reset by this.
+
 __Note:__ If your new configuration contains the same `pref_DPC_kiosk_package`, it won't be reinstalled - not even if the downloadable package has been updated in the meantime. This will be addressed with a future release. For the time being, you have to remove the kiosk-app by hand or reset the whole device if you also wish to reinstall the kiosk application during the provisioning of pretixDPC
 
 ### Charging
