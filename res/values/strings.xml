@@ -20,5 +20,5 @@
     <string name="setup_no_kioskapp_button">Install now</string>
     <string name="setup_everything_fine">Everything is fine!</string>
     <string name="setup_everything_fine_expl">Why you are seeing this screen is thus beyond our understanding.\n\nPerhaps try restarting the app and/or device and see if the problem persists.</string>
-    <string name="setup_everything_fine_button">Exit the application</string>
+    <string name="setup_continue_button">Click to continue</string>
 </resources>

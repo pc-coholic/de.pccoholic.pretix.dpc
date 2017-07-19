@@ -50,4 +50,8 @@ public class Common {
 
         return false;
     }
+
+    static boolean isDeviceReady(Context context) {
+        return isDeviceOwner(context) && isDeviceAdmin(context) && isDPCProvisioned(context) && isKioskAppInstalled(context);
+    }
 }

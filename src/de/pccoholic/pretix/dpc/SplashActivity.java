@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-
 public class SplashActivity extends Activity {
-    boolean isProvisioned = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,7 +12,7 @@ public class SplashActivity extends Activity {
 
         Class<?> intentToLaunch = DPC.class;
 
-        if (isProvisioned != true) {
+        if (!Common.isDeviceReady(this)) {
             intentToLaunch = SetupActivity.class;
         }
 
