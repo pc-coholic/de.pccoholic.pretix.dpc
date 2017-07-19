@@ -36,7 +36,7 @@ public class SetupActivity  extends Activity {
         } else if (!Common.isDeviceAdmin(this)) {
             title.setText(R.string.setup_not_device_admin);
             expl.setText(R.string.setup_not_device_admin_expl);
-        } else if (Common.isDPCProvisioned(this)) {
+        } else if (!Common.isDPCProvisioned(this)) {
             title.setText(R.string.setup_not_provisioned);
             expl.setText(R.string.setup_not_provisioned_expl);
 
