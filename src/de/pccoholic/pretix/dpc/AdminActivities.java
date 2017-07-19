@@ -1,7 +1,6 @@
 package de.pccoholic.pretix.dpc;
 
 import android.app.admin.DevicePolicyManager;
-import android.app.admin.DnsEvent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
