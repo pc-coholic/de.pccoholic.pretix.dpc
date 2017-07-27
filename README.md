@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/pc-coholic/de.pccoholic.pretix.dpc/master/img/web_hi_res_512.png?token=AAn81Hvw7AdOyqR06TPo8ckk9rJy63zLks5ZeKUhwA%3D%3D" width="100" height="100" /> de.pccoholic.pretix.dpc
+# <img src="https://raw.githubusercontent.com/pc-coholic/de.pccoholic.pretix.dpc/master/img/web_hi_res_512.png" width="100" height="100" /> de.pccoholic.pretix.dpc
 
 Android Device Policy Controller (DPC) for pretix and pretixdroid
 
