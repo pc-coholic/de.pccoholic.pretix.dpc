@@ -56,4 +56,11 @@ public class AdminActivities {
 
         dpm.setSecureSetting(deviceAdmin, Settings.Secure.INSTALL_NON_MARKET_APPS, "1");
     }
+
+    static void setLockTaskApplications(Context context) {
+        ComponentName deviceAdmin = new ComponentName(context, AdminReceiver.class);
+        DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        dpm.setLockTaskPackages(deviceAdmin,
+                new String[] { context.getPackageName() });
+    }
 }

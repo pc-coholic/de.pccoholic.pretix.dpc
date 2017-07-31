@@ -54,6 +54,7 @@ public class DPC extends Activity {
         Common.setScannerToBroadcast();
 
         AdminActivities.becomeHomeActivity(this);
+        AdminActivities.setLockTaskApplications(this);
 
         startService(new Intent(this, StatusbarService.class));
 
