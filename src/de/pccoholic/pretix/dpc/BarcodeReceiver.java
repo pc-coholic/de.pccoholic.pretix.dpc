@@ -28,6 +28,13 @@ public class BarcodeReceiver extends BroadcastReceiver {
             } catch (Exception e) {
 
             }
+        } else if (barcodeStr.equals("DPCRESET_" + prefs.getString("pref_DPC_unlock_barcode", null))) {
+            try {
+                AdminActivities.resetDPC(context);
+                DPC.getInstance().stopLockTaskAndDie();
+            } catch (Exception e) {
+
+            }
         }
     }
 

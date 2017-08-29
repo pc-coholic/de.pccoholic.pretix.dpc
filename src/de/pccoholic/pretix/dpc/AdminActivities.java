@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
 
@@ -62,5 +63,13 @@ public class AdminActivities {
         DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
         dpm.setLockTaskPackages(deviceAdmin,
                 new String[] { context.getPackageName() });
+    }
+
+    static void resetDPC(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        //prefsEditor.clear();
+        prefsEditor.putBoolean("pref_DPC_is_provisioned", false);
+        prefsEditor.commit();
     }
 }
